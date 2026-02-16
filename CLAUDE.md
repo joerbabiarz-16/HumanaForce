@@ -1,8 +1,8 @@
-# CLAUDE.md — HumanaForce AI Innovation Library
+# CLAUDE.md — HumanaForce AI Use Case Library
 
 ## Project Overview
 
-HumanaForce is a **static single-page React application** showcasing Humana's AI use cases powered by Salesforce Agentforce. It serves as a proof-of-concept / sales enablement tool featuring interactive healthcare AI use case demonstrations.
+HumanaForce is a **static single-page React application** serving as a Salesforce AI Use Case Library for Humana. Inspired by [agentforge.tools](https://agentforge.tools), it provides a browsable collection of healthcare-focused AI use cases with business context, technical guidance, metrics, video demos, and multi-dimensional filtering.
 
 **Live deployment:** Hosted on Vercel as a static site.
 
@@ -13,7 +13,7 @@ HumanaForce is a **static single-page React application** showcasing Humana's AI
 | Framework      | React 18 (CDN via unpkg, not bundled)          |
 | JSX Transform  | Babel Standalone (in-browser transpilation)     |
 | Styling        | Vanilla CSS with CSS custom properties          |
-| Fonts          | Google Fonts (Sora, IBM Plex Sans)             |
+| Fonts          | Google Fonts (Inter)                           |
 | Hosting        | Vercel (static, `@vercel/static`)              |
 | Build Tools    | None — no bundler, no package.json             |
 | Language       | JavaScript (no TypeScript)                     |
@@ -22,7 +22,7 @@ HumanaForce is a **static single-page React application** showcasing Humana's AI
 
 ```
 HumanaForce/
-├── index.html           # Main application — all React code, CSS, and data (~991 lines)
+├── index.html           # Main application — all React code, CSS, and data
 ├── index-backup.html    # Backup version of the site
 ├── index-old.html       # Previous version with different styling
 ├── vercel.json          # Vercel deployment configuration (static SPA routing)
@@ -45,29 +45,30 @@ The entire application lives in `index.html`. This is intentional — the projec
 ### React Component Structure
 
 ```
-App (root component)
-├── Header — hero section with Humana + Salesforce dual branding
-├── Navigation — sticky nav bar
-├── Main Content
-│   ├── Filter Section — category filter buttons
-│   └── Use Cases Grid — responsive card layout
-└── Modal — detail view overlay
-    ├── Overview tab (default)
-    ├── Video Demo tab (conditional, when hasVideo)
-    └── Presentation tab (conditional, when hasPDF)
+App (root)
+├── TopNav — sticky top navigation bar with brand + links
+├── Hero — gradient hero section with stats counters
+├── FilterBar — sticky search + dropdown filters (Department, Cloud, Impact)
+│   └── Dropdown — reusable dropdown filter component
+├── Main Grid — responsive card grid
+│   └── UseCaseCard — individual use case card
+├── Footer — site footer
+└── DetailModal — tabbed detail overlay (Overview, Technical, Metrics, Video, PDF)
 ```
 
 ### State Management
 
-Three pieces of local React state via `useState`:
+Five pieces of local React state via `useState`:
 
 ```javascript
-const [selectedCategory, setSelectedCategory] = useState('All');
-const [selectedUseCase, setSelectedUseCase] = useState(null);
-const [activeTab, setActiveTab] = useState('overview');
+const [search, setSearch] = useState('');       // Text search query
+const [department, setDepartment] = useState('All');  // Department filter
+const [cloud, setCloud] = useState('All');      // Salesforce Cloud filter
+const [impact, setImpact] = useState('All');    // Impact level filter
+const [selectedUC, setSelectedUC] = useState(null);   // Selected use case for modal
 ```
 
-No external state management library is used.
+Filtering is memoized with `useMemo` for performance.
 
 ### Data Model
 
@@ -77,24 +78,30 @@ Use cases are defined in a `useCasesData` array within the script. Each use case
 {
   id: number,
   title: string,
-  category: string,          // "Claims", "Member Services", "Care Coordination", etc.
+  department: string,      // "Claims", "Member Services", "Care Coordination", etc.
+  cloud: string,           // "Health Cloud", "Service Cloud", "Data Cloud", etc.
   description: string,
   businessContext: string,
   technicalApproach: string,
-  impact: string,            // "High Impact", "Very High Impact", "Medium Impact"
-  timeToValue: string,       // e.g., "3 months"
-  roi: string,               // e.g., "275%"
-  technologies: string[],    // Array of tech names
-  metrics: { [key]: string },
-  image: string,             // Path to card image
-  hasVideo?: boolean,        // Optional video support
+  impact: string,          // "High", "Very High", "Medium"
+  timeToValue: string,     // e.g., "3 months"
+  roi: string,             // e.g., "275%"
+  technologies: string[],  // Array of Salesforce tech names
+  metrics: { [value]: label },  // Key = metric value, Value = metric description
+  isNew: boolean,          // Shows "New" badge
+  hasVideo?: boolean,
   videoUrl?: string,
-  hasPDF?: boolean,          // Optional PDF embed
-  pdfUrl?: string
+  hasPDF?: boolean,
+  pdfUrl?: string,
+  image?: string           // Optional card image path
 }
 ```
 
-**Current use cases (7):** Intelligent Claims Processing, Member Support Chatbot, Predictive Care Management, Provider Network Optimization, Automated Prior Authorization, Personalized Wellness Programs, Data Cloud Member Experience Extension.
+**Departments (7):** Claims, Member Services, Care Coordination, Provider Networks, Data & Analytics, Compliance, Sales
+
+**Salesforce Clouds (7):** Health Cloud, Service Cloud, Experience Cloud, Marketing Cloud, Data Cloud, Tableau, Sales Cloud
+
+**Current use cases: 16**
 
 ## Design System
 
@@ -103,31 +110,39 @@ Use cases are defined in a `useCasesData` array within the script. Each use case
 ```css
 --humana-green: #00A758;
 --humana-dark-green: #006B5E;
+--humana-light-green: #E8F5EE;
 --salesforce-blue: #00A1E0;
 --salesforce-dark-blue: #032D60;
+--salesforce-light-blue: #E8F4FD;
 --accent-orange: #FF6B35;
---background: #F8F9FB;
+--background: #F8FAFB;
 --surface: #FFFFFF;
---text-primary: #1A1F36;
---text-secondary: #697386;
---border: #E3E8EF;
+--text-primary: #111827;
+--text-secondary: #6B7280;
+--text-tertiary: #9CA3AF;
 ```
 
 ### Typography
 
-- **Headings:** Sora (weights: 300, 400, 600, 700)
-- **Body:** IBM Plex Sans (weights: 300, 400, 500, 600)
+- **Font:** Inter (weights: 300, 400, 500, 600, 700, 800)
+
+### Impact Level Color Coding
+
+- **Very High:** Green badge (`#DCFCE7` bg, `#166534` text)
+- **High:** Amber badge (`#FEF3C7` bg, `#92400E` text)
+- **Medium:** Indigo badge (`#E0E7FF` bg, `#3730A3` text)
 
 ### Responsive Breakpoint
 
 - Mobile-first at **768px**
-- Grid: `repeat(auto-fill, minmax(400px, 1fr))` → `1fr` on mobile
+- Grid: `repeat(auto-fill, minmax(380px, 1fr))` → `1fr` on mobile
 
 ### Animations
 
 - `fadeIn` / `fadeInUp` / `fadeInDown` — entrance transitions
 - `slideUp` — modal entrance
-- Staggered delays via `animation-delay` for progressive reveal
+- `pulse` — hero badge dot
+- Staggered card animations via `animation-delay`
 
 ## Development Workflow
 
@@ -141,50 +156,53 @@ No build process is needed. To develop locally:
 ### Making Changes
 
 All application code is in `index.html`:
-- **CSS:** Inside the `<style>` block (lines ~11–350)
-- **React/JSX:** Inside the `<script type="text/babel">` block (lines ~350–991)
+- **CSS:** Inside the `<style>` block
+- **React Components:** Inside the `<script type="text/babel">` block
 - **Data:** The `useCasesData` array within the script block
 
 ### Deployment
 
-Push to the repository. Vercel auto-deploys from `vercel.json` configuration:
-- Static build using `@vercel/static`
-- SPA routing: all paths redirect to `/index.html`
+Push to the repository. Vercel auto-deploys from `vercel.json` configuration.
 
 ### No Tests, Linting, or CI/CD
 
-This project has:
-- No test framework or test files
-- No ESLint / Prettier configuration
-- No CI/CD pipeline files
-- No pre-commit hooks
+This project has no test framework, linting, or CI/CD pipeline.
 
 ## Conventions for AI Assistants
 
 ### Code Style
 
 - **Variables/functions:** camelCase
-- **CSS classes:** kebab-case
-- **Components:** Single `App()` function component
-- **State:** React hooks (`useState`) — no class components
+- **CSS classes:** kebab-case (BEM-like naming: `.card-title`, `.modal-head-metric`)
+- **Components:** Named function components (`function App()`, `function UseCaseCard()`)
+- **State:** React hooks (`useState`, `useMemo`, `useEffect`, `useRef`)
+- **CSS custom properties** for all colors and design tokens
 
 ### When Modifying the Site
 
-1. **All edits go in `index.html`** — there is no separate JS/CSS file structure
-2. **Preserve dual branding** — Humana green + Salesforce blue gradient in the header
+1. **All edits go in `index.html`** — there is no separate file structure
+2. **Preserve dual branding** — Humana green + Salesforce blue throughout
 3. **Keep CDN approach** — do not introduce npm/bundler unless explicitly requested
 4. **Maintain responsive design** — test at both desktop and mobile breakpoints
 5. **Follow existing animation patterns** — use the defined keyframe animations
-6. **Image paths** are relative: `images/slide_N.jpg`
-7. **Keep `index-backup.html` and `index-old.html`** as reference — do not delete
+6. **Keep `index-backup.html` and `index-old.html`** as reference — do not delete
+7. **Use CSS custom properties** — never hardcode colors directly
 
 ### Adding a New Use Case
 
-Add an entry to the `useCasesData` array following the existing schema. Categories are dynamically extracted from the data — new categories appear automatically in the filter bar.
+Add an entry to the `useCasesData` array following the schema above. Departments, clouds, and impacts are dynamically extracted — new values appear automatically in filters.
+
+### Adding a New Filter Dimension
+
+1. Add the field to the use case data model
+2. Create a `useState` for the filter
+3. Add the filter to the `useMemo` filtering logic
+4. Add a `<Dropdown>` component in the filter bar
 
 ### Common Pitfalls
 
 - Babel standalone transpilation means syntax errors won't show at build time — check the browser console
-- Large inline scripts can be hard to navigate — use search to find specific sections
-- The modal relies on `selectedUseCase` state — setting it to `null` closes the modal
+- Dropdowns use a `mousedown` event listener for click-outside-to-close — test this behavior
+- The modal locks body scroll on open (`overflow: hidden`) and restores on close
 - Video and PDF embeds use iframes — ensure URLs are HTTPS for mixed-content compliance
+- The `metrics` object uses the metric value as the key and description as the value (reversed from typical patterns)

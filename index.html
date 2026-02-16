@@ -3,639 +3,901 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HumanaForce - AI Innovation Library</title>
+    <title>HumanaForce - Salesforce AI Use Case Library</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --humana-green: #00A758;
             --humana-dark-green: #006B5E;
+            --humana-light-green: #E8F5EE;
             --salesforce-blue: #00A1E0;
             --salesforce-dark-blue: #032D60;
+            --salesforce-light-blue: #E8F4FD;
             --accent-orange: #FF6B35;
-            --background: #F8F9FB;
+            --accent-purple: #7C3AED;
+            --accent-amber: #F59E0B;
+            --background: #F8FAFB;
             --surface: #FFFFFF;
-            --text-primary: #1A1F36;
-            --text-secondary: #697386;
-            --border: #E3E8EF;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.12);
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--background);
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header with Dual Branding */
-        .header {
-            background: linear-gradient(135deg, var(--humana-dark-green) 0%, var(--humana-green) 50%, var(--salesforce-blue) 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
+        /* ===== TOP NAV BAR ===== */
+        .topnav {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 50%, rgba(0,161,224,0.2) 0%, transparent 50%);
-            pointer-events: none;
+            z-index: 200;
         }
 
-        .header-content {
-            max-width: 1400px;
+        .topnav-inner {
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 2.5rem 3rem;
-            position: relative;
-            z-index: 1;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
         }
 
-        .brand-logos {
+        .topnav-left {
             display: flex;
             align-items: center;
             gap: 2rem;
-            margin-bottom: 2.5rem;
-            animation: fadeInDown 0.8s ease-out;
         }
 
-        .logo-humana {
-            font-family: 'Sora', sans-serif;
-            font-size: 2.5rem;
+        .topnav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .topnav-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--humana-green), var(--salesforce-blue));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+
+        .topnav-title {
             font-weight: 700;
-            color: var(--surface);
+            font-size: 1.125rem;
             letter-spacing: -0.02em;
         }
 
-        .logo-divider {
-            width: 2px;
-            height: 40px;
-            background: rgba(255,255,255,0.3);
+        .topnav-title span {
+            color: var(--humana-green);
         }
 
-        .logo-salesforce {
+        .topnav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .topnav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 0.875rem;
+            border-radius: var(--radius-md);
+            transition: all 0.15s ease;
+        }
+
+        .topnav-link:hover { color: var(--text-primary); background: var(--border-light); }
+        .topnav-link.active { color: var(--humana-green); background: var(--humana-light-green); }
+
+        .topnav-right {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            color: var(--surface);
-            font-size: 1.1rem;
+        }
+
+        .topnav-cta {
+            background: var(--humana-green);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-full);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .topnav-cta:hover { background: var(--humana-dark-green); }
+
+        .sf-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
             font-weight: 500;
         }
 
-        .sf-cloud {
-            width: 32px;
-            height: 32px;
+        .sf-badge-icon {
+            width: 20px;
+            height: 20px;
             background: var(--salesforce-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            color: white;
+            font-size: 0.6rem;
         }
 
-        .hero-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 4rem;
-            font-weight: 700;
-            color: var(--surface);
-            line-height: 1.1;
+        /* ===== HERO SECTION ===== */
+        .hero {
+            background: linear-gradient(135deg, #032D60 0%, var(--humana-dark-green) 40%, var(--humana-green) 70%, var(--salesforce-blue) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 20% 50%, rgba(0,167,88,0.15) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 30%, rgba(0,161,224,0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 4.5rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 0.375rem 1rem;
+            border-radius: var(--radius-full);
+            color: rgba(255,255,255,0.9);
+            font-size: 0.8125rem;
+            font-weight: 500;
             margin-bottom: 1.5rem;
-            letter-spacing: -0.03em;
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #34D399;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hero h1 {
+            font-size: 3.25rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.1;
+            letter-spacing: -0.035em;
+            margin-bottom: 1.25rem;
+            max-width: 700px;
+            animation: fadeInUp 0.7s ease-out 0.1s backwards;
         }
 
         .hero-subtitle {
-            font-size: 1.35rem;
-            color: rgba(255,255,255,0.95);
-            max-width: 750px;
-            font-weight: 300;
-            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+            font-size: 1.125rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+            font-weight: 400;
+            line-height: 1.7;
+            animation: fadeInUp 0.7s ease-out 0.25s backwards;
         }
 
-        /* Navigation */
-        .nav {
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2.5rem;
+            animation: fadeInUp 0.7s ease-out 0.4s backwards;
+        }
+
+        .hero-stat {
+            text-align: left;
+        }
+
+        .hero-stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-stat-label {
+            font-size: 0.8125rem;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+            margin-top: 0.125rem;
+        }
+
+        /* ===== FILTER BAR ===== */
+        .filter-bar {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-sm);
+            top: 64px;
+            z-index: 150;
         }
 
-        .nav-content {
-            max-width: 1400px;
+        .filter-bar-inner {
+            max-width: 1320px;
             margin: 0 auto;
-            padding: 0 3rem;
+            padding: 1rem 2rem;
+        }
+
+        .filter-row {
             display: flex;
-            gap: 2.5rem;
             align-items: center;
-        }
-
-        .nav-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 1.25rem 0;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-
-        .nav-link:hover {
-            color: var(--humana-green);
-            border-bottom-color: var(--humana-green);
-        }
-
-        .nav-link.active {
-            color: var(--humana-green);
-            border-bottom-color: var(--humana-green);
-        }
-
-        /* Main Content */
-        .main-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 4rem 3rem;
-        }
-
-        /* Filter Section */
-        .filter-section {
-            background: var(--surface);
-            padding: 2.5rem;
-            border-radius: 20px;
-            margin-bottom: 4rem;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            animation: fadeInUp 0.6s ease-out 0.6s backwards;
-        }
-
-        .filter-header {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.75rem;
-            color: var(--text-primary);
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-
-        .filter-buttons {
-            display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
         }
 
-        .filter-btn {
-            padding: 0.85rem 1.75rem;
-            border: 2px solid var(--border);
-            background: var(--surface);
-            color: var(--text-secondary);
-            border-radius: 100px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            font-family: 'IBM Plex Sans', sans-serif;
-        }
-
-        .filter-btn:hover {
-            border-color: var(--humana-green);
-            color: var(--humana-green);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .filter-btn.active {
-            background: linear-gradient(135deg, var(--humana-green), var(--salesforce-blue));
-            color: var(--surface);
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(0, 167, 88, 0.3);
-        }
-
-        /* Use Cases Grid */
-        .use-cases-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 2.5rem;
-            animation: fadeIn 0.8s ease-out 0.8s backwards;
-        }
-
-        .use-case-card {
-            background: var(--surface);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            border: 1px solid var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
+        .filter-search {
+            flex: 1;
+            min-width: 200px;
+            max-width: 320px;
             position: relative;
         }
 
-        .use-case-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--humana-green);
+        .filter-search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            pointer-events: none;
         }
 
-        .card-image {
-            height: 220px;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, var(--humana-dark-green), var(--salesforce-blue));
-        }
-
-        .card-image img {
+        .filter-search input {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.9;
-            transition: all 0.5s ease;
+            padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--background);
+            transition: all 0.15s ease;
+            outline: none;
         }
 
-        .use-case-card:hover .card-image img {
-            transform: scale(1.1);
-            opacity: 1;
+        .filter-search input:focus {
+            border-color: var(--humana-green);
+            box-shadow: 0 0 0 3px rgba(0, 167, 88, 0.1);
         }
 
-        .card-image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 100%);
+        .filter-search input::placeholder { color: var(--text-tertiary); }
+
+        .filter-divider {
+            width: 1px;
+            height: 28px;
+            background: var(--border);
         }
 
-        .category-badge {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
             background: var(--surface);
-            color: var(--humana-green);
-            padding: 0.5rem 1.25rem;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            z-index: 1;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            white-space: nowrap;
         }
 
-        .card-body {
-            padding: 2.25rem;
+        .filter-dropdown-btn:hover { border-color: var(--text-tertiary); color: var(--text-primary); }
+        .filter-dropdown-btn.active { border-color: var(--humana-green); color: var(--humana-green); background: var(--humana-light-green); }
+
+        .filter-dropdown-arrow { font-size: 0.625rem; margin-left: 0.125rem; }
+
+        .filter-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            min-width: 200px;
+            padding: 0.375rem;
+            z-index: 300;
+            animation: fadeIn 0.15s ease-out;
+        }
+
+        .filter-dropdown-item {
+            display: block;
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: none;
+            background: none;
+            text-align: left;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.1s ease;
+            font-family: inherit;
+        }
+
+        .filter-dropdown-item:hover { background: var(--border-light); color: var(--text-primary); }
+        .filter-dropdown-item.selected { background: var(--humana-light-green); color: var(--humana-green); font-weight: 600; }
+
+        .filter-chips {
+            display: flex;
+            gap: 0.375rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--surface);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .filter-chip:hover { border-color: var(--humana-green); color: var(--humana-green); }
+        .filter-chip.active { background: var(--humana-green); color: white; border-color: var(--humana-green); }
+
+        .filter-clear {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-weight: 500;
+            text-decoration: underline;
+            font-family: inherit;
+        }
+
+        .filter-clear:hover { color: var(--accent-orange); }
+
+        .result-count {
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* ===== USE CASE GRID ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* ===== USE CASE CARD ===== */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--humana-green);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .card-top {
+            padding: 1.5rem 1.5rem 0;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 0.375rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.875rem;
+        }
+
+        .card-tag {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
+            border-radius: var(--radius-full);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .tag-department {
+            background: var(--humana-light-green);
+            color: var(--humana-dark-green);
+        }
+
+        .tag-cloud {
+            background: var(--salesforce-light-blue);
+            color: var(--salesforce-dark-blue);
+        }
+
+        .tag-new {
+            background: linear-gradient(135deg, var(--accent-orange), #FF8C66);
+            color: white;
         }
 
         .card-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.65rem;
+            font-size: 1.125rem;
+            font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 1.25rem;
-            font-weight: 600;
-            line-height: 1.3;
+            line-height: 1.35;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
         }
 
-        .card-description {
+        .card-desc {
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            font-size: 0.95rem;
+            line-height: 1.65;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
-        .card-meta {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .meta-item {
+        .card-bottom {
+            padding: 1rem 1.5rem 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
+            margin-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .card-metrics {
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        .card-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-metric-value {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+
+        .card-metric-label {
+            font-size: 0.6875rem;
+            color: var(--text-tertiary);
             font-weight: 500;
         }
 
-        .meta-icon {
-            font-size: 1.1rem;
-        }
-
-        .card-footer {
+        .card-impact {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .view-btn {
-            background: linear-gradient(135deg, var(--humana-green), var(--salesforce-blue));
-            color: var(--surface);
-            border: none;
-            padding: 0.9rem 2rem;
-            border-radius: 100px;
+            gap: 0.375rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.95rem;
-            box-shadow: 0 4px 12px rgba(0, 167, 88, 0.3);
+            padding: 0.25rem 0.625rem;
+            border-radius: var(--radius-full);
         }
 
-        .view-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 167, 88, 0.4);
+        .impact-high { background: #FEF3C7; color: #92400E; }
+        .impact-very-high { background: #DCFCE7; color: #166534; }
+        .impact-medium { background: #E0E7FF; color: #3730A3; }
+
+        .card-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
         }
 
-        .impact-tag {
-            color: var(--accent-orange);
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        .card:hover .card-arrow {
+            background: var(--humana-green);
+            color: white;
         }
 
-        /* Modal */
+        /* ===== MODAL ===== */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(26, 31, 54, 0.85);
-            backdrop-filter: blur(8px);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             z-index: 1000;
             padding: 2rem;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .modal-content {
-            background: var(--surface);
-            border-radius: 24px;
-            max-width: 1000px;
-            width: 100%;
-            max-height: 90vh;
             overflow-y: auto;
-            position: relative;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.2s ease-out;
         }
 
-        .modal-header {
-            background: linear-gradient(135deg, var(--humana-dark-green), var(--humana-green), var(--salesforce-blue));
-            padding: 3.5rem;
-            color: var(--surface);
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            max-width: 900px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-head {
+            background: linear-gradient(135deg, var(--salesforce-dark-blue), var(--humana-dark-green), var(--humana-green));
+            padding: 2.5rem 2.5rem 2rem;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            color: white;
             position: relative;
         }
 
-        .modal-close {
+        .modal-close-btn {
             position: absolute;
-            top: 1.75rem;
-            right: 1.75rem;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: none;
-            color: var(--surface);
-            font-size: 1.75rem;
-            width: 48px;
-            height: 48px;
+            top: 1.25rem;
+            right: 1.25rem;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 1.25rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            font-weight: 300;
+            transition: all 0.15s ease;
         }
 
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: rotate(90deg);
-        }
+        .modal-close-btn:hover { background: rgba(255,255,255,0.25); }
 
-        .modal-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 2.75rem;
+        .modal-head-tags {
+            display: flex;
+            gap: 0.375rem;
             margin-bottom: 1rem;
-            font-weight: 700;
-            line-height: 1.2;
         }
 
-        .modal-category {
-            opacity: 0.9;
-            font-size: 1.1rem;
+        .modal-head-tag {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            background: rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .modal-head h2 {
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-head-sub {
+            font-size: 0.9375rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.6;
+        }
+
+        .modal-head-metrics {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .modal-head-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-head-metric-value {
+            font-size: 1.375rem;
+            font-weight: 800;
+        }
+
+        .modal-head-metric-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
             font-weight: 500;
+        }
+
+        /* Modal Tabs */
+        .modal-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            padding: 0 2.5rem;
+            gap: 0;
+        }
+
+        .modal-tab {
+            padding: 1rem 1.25rem;
+            border: none;
+            background: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .modal-tab:hover { color: var(--text-primary); }
+        .modal-tab.active { color: var(--humana-green); border-bottom-color: var(--humana-green); }
+
+        .modal-tab-badge {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-full);
+            font-size: 0.625rem;
+            font-weight: 700;
+            margin-left: 0.375rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            vertical-align: middle;
         }
 
         .modal-body {
-            padding: 3.5rem;
-        }
-
-        /* Embed Tabs */
-        .embed-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2.5rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .embed-tab {
-            padding: 1.25rem 2rem;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 1rem;
-            position: relative;
-        }
-
-        .embed-tab:hover {
-            color: var(--humana-green);
-        }
-
-        .embed-tab.active {
-            color: var(--humana-green);
-            border-bottom-color: var(--humana-green);
-        }
-
-        .embed-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--accent-orange), #FF8C66);
-            color: white;
-            padding: 0.35rem 0.9rem;
-            border-radius: 100px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-left: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .embed-container {
-            margin: 2.5rem 0;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            border: 1px solid var(--border);
-        }
-
-        .embed-container iframe {
-            width: 100%;
-            height: 600px;
-            border: none;
+            padding: 2rem 2.5rem 2.5rem;
         }
 
         .modal-section {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
-        .section-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 1.75rem;
-            color: var(--text-primary);
-            margin-bottom: 1.25rem;
-            font-weight: 600;
+        .modal-section:last-child { margin-bottom: 0; }
+
+        .modal-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            margin-bottom: 0.75rem;
         }
 
-        .section-content {
+        .modal-section-content {
+            font-size: 0.9375rem;
             color: var(--text-secondary);
-            line-height: 1.9;
-            font-size: 1.05rem;
+            line-height: 1.75;
         }
 
-        .tech-stack {
+        .modal-tech-list {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
 
-        .tech-tag {
-            background: linear-gradient(135deg, rgba(0, 167, 88, 0.08), rgba(0, 161, 224, 0.08));
-            color: var(--humana-green);
-            padding: 0.65rem 1.5rem;
-            border-radius: 100px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid rgba(0, 167, 88, 0.2);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-top: 2.5rem;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, var(--background), var(--surface));
-            padding: 2rem;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--humana-green), var(--salesforce-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: 'Sora', sans-serif;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-top: 0.75rem;
+        .modal-tech-tag {
+            font-size: 0.8125rem;
             font-weight: 500;
+            padding: 0.375rem 0.875rem;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            background: var(--background);
         }
 
-        /* Animations */
+        .modal-stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .modal-stat-card {
+            padding: 1.25rem;
+            border-radius: var(--radius-lg);
+            background: var(--background);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--humana-green);
+            letter-spacing: -0.02em;
+        }
+
+        .modal-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        .embed-frame {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+
+        .embed-frame iframe {
+            width: 100%;
+            height: 550px;
+            border: none;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .empty-state h3 { font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .empty-state p { font-size: 0.875rem; }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-left {
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.8125rem;
+            color: var(--text-tertiary);
+        }
+
+        /* ===== ANIMATIONS ===== */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
+        .animate-in {
+            animation: fadeInUp 0.4s ease-out backwards;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.75rem;
-            }
-
-            .use-cases-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-content, .nav-content, .main-content, .modal-body {
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-            }
-
-            .brand-logos {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .logo-divider {
-                display: none;
-            }
+            .hero h1 { font-size: 2rem; }
+            .hero-inner { padding: 2.5rem 1.25rem 2rem; }
+            .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+            .grid { grid-template-columns: 1fr; }
+            .filter-row { gap: 0.5rem; }
+            .filter-search { max-width: 100%; min-width: 100%; }
+            .filter-divider { display: none; }
+            .topnav-links { display: none; }
+            .topnav-inner { padding: 0 1rem; }
+            .main { padding: 1.25rem; }
+            .filter-bar-inner { padding: 0.75rem 1.25rem; }
+            .modal { margin: 0.5rem; }
+            .modal-head { padding: 1.5rem; }
+            .modal-body { padding: 1.5rem; }
+            .modal-tabs { padding: 0 1.5rem; overflow-x: auto; }
+            .footer-inner { flex-direction: column; gap: 0.5rem; }
+            .modal-head h2 { font-size: 1.375rem; }
+            .modal-head-metrics { gap: 1rem; flex-wrap: wrap; }
         }
     </style>
 </head>
@@ -643,344 +905,658 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState } = React;
+        const { useState, useMemo, useRef, useEffect } = React;
 
-        // Enhanced Use Cases Data with Images
+        // ==========================================
+        // USE CASES DATA
+        // ==========================================
         const useCasesData = [
             {
                 id: 1,
                 title: "Intelligent Claims Processing",
-                category: "Claims",
-                description: "AI-powered system that automatically reviews and processes medical claims, reducing processing time by 60% while improving accuracy.",
-                businessContext: "Manual claims processing was creating bottlenecks and delays in member reimbursements. Members were experiencing 10-15 day wait times for routine claims.",
-                technicalApproach: "Leveraging Salesforce Einstein AI with custom ML models trained on historical claims data. Integration with existing claims management system through MuleSoft.",
-                impact: "High Impact",
+                department: "Claims",
+                cloud: "Health Cloud",
+                description: "AI-powered system that automatically reviews, validates, and processes medical claims using Einstein AI, reducing processing time by 60% while improving accuracy.",
+                businessContext: "Manual claims processing created bottlenecks and delays in member reimbursements. Members experienced 10-15 day wait times for routine claims, leading to dissatisfaction and increased call center volume.",
+                technicalApproach: "Leveraging Salesforce Einstein AI with custom ML models trained on historical claims data. Integration with existing claims management system through MuleSoft. Automated routing for complex claims and real-time fraud detection patterns.",
+                impact: "High",
                 timeToValue: "3 months",
                 roi: "275%",
-                technologies: ["Einstein AI", "MuleSoft", "Apex", "LWC"],
-                metrics: {
-                    efficiency: "60% faster processing",
-                    accuracy: "95% accuracy rate",
-                    savings: "$2.3M annual savings"
-                },
+                technologies: ["Einstein AI", "MuleSoft", "Apex", "LWC", "Health Cloud"],
+                metrics: { "60%": "faster processing", "95%": "accuracy rate", "$2.3M": "annual savings" },
+                isNew: false,
                 image: "./images/slide_4.jpg"
             },
             {
                 id: 2,
                 title: "Member Support Chatbot",
-                category: "Member Services",
-                description: "24/7 AI assistant that handles member inquiries about benefits, claims status, and provider networks with natural language understanding.",
-                businessContext: "Call center was overwhelmed with routine inquiries, leading to long wait times and member dissatisfaction. 70% of calls were for simple information requests.",
-                technicalApproach: "Einstein Bot integrated with Service Cloud, connected to member data through Health Cloud. Natural language processing trained on common member questions.",
-                impact: "Very High Impact",
+                department: "Member Services",
+                cloud: "Service Cloud",
+                description: "24/7 AI assistant that handles member inquiries about benefits, claims status, provider networks, and plan details with natural language understanding.",
+                businessContext: "Call center was overwhelmed with routine inquiries, leading to long wait times and member dissatisfaction. 70% of calls were for simple information requests that could be automated.",
+                technicalApproach: "Einstein Bot integrated with Service Cloud, connected to member data through Health Cloud. Natural language processing trained on 50,000+ historical member interactions for high accuracy.",
+                impact: "Very High",
                 timeToValue: "2 months",
                 roi: "320%",
-                technologies: ["Einstein Bots", "Service Cloud", "Health Cloud", "Flow"],
-                metrics: {
-                    resolution: "78% self-service rate",
-                    satisfaction: "4.5/5 member rating",
-                    cost: "40% reduction in call volume"
-                },
+                technologies: ["Einstein Bots", "Service Cloud", "Health Cloud", "Flow", "Agentforce"],
+                metrics: { "78%": "self-service rate", "4.5/5": "member rating", "40%": "fewer calls" },
+                isNew: false,
                 image: "./images/slide_5.jpg"
             },
             {
                 id: 3,
                 title: "Predictive Care Management",
-                category: "Care Coordination",
-                description: "Machine learning model that identifies members at risk of chronic conditions, enabling proactive outreach and care intervention.",
-                businessContext: "Reactive care model was missing opportunities for early intervention. High-risk members weren't being identified until conditions became critical.",
-                technicalApproach: "Einstein Analytics with predictive models analyzing member health data, claims patterns, and social determinants of health. Automated workflows trigger care coordinator outreach.",
-                impact: "Very High Impact",
+                department: "Care Coordination",
+                cloud: "Health Cloud",
+                description: "Machine learning model that identifies members at risk of chronic conditions, enabling proactive outreach and care intervention before conditions become critical.",
+                businessContext: "Reactive care model was missing opportunities for early intervention. High-risk members weren't being identified until conditions became critical, resulting in higher costs and worse outcomes.",
+                technicalApproach: "Einstein Analytics with predictive models analyzing member health data, claims patterns, and social determinants of health. Automated workflows trigger care coordinator outreach via preferred channel.",
+                impact: "Very High",
                 timeToValue: "4 months",
                 roi: "450%",
                 technologies: ["Einstein Analytics", "Health Cloud", "Tableau CRM", "Flow Orchestration"],
-                metrics: {
-                    intervention: "35% earlier interventions",
-                    outcomes: "22% improvement in outcomes",
-                    engagement: "85% member engagement rate"
-                },
+                metrics: { "35%": "earlier interventions", "22%": "better outcomes", "85%": "engagement rate" },
+                isNew: false,
                 image: "./images/slide_6.jpg"
             },
             {
                 id: 4,
                 title: "Provider Network Optimization",
-                category: "Provider Networks",
-                description: "AI-driven analysis of provider performance, cost, and quality metrics to optimize network composition and member referrals.",
-                businessContext: "Network decisions were based on limited data points. Members often referred to providers that weren't optimal for their specific needs.",
-                technicalApproach: "Custom Einstein model analyzing provider quality scores, cost efficiency, member satisfaction, and outcome data. Integration with existing provider management systems.",
-                impact: "High Impact",
+                department: "Provider Networks",
+                cloud: "Experience Cloud",
+                description: "AI-driven analysis of provider performance, cost, and quality metrics to optimize network composition and improve member-provider matching.",
+                businessContext: "Network decisions were based on limited data points. Members often referred to providers that weren't optimal for their specific needs, geography, or insurance coverage.",
+                technicalApproach: "Custom Einstein model analyzing provider quality scores, cost efficiency, member satisfaction, and outcome data. Integration with existing provider management systems and real-time directory updates.",
+                impact: "High",
                 timeToValue: "5 months",
                 roi: "180%",
                 technologies: ["Einstein Discovery", "Experience Cloud", "Tableau", "Integration APIs"],
-                metrics: {
-                    quality: "15% improvement in quality scores",
-                    cost: "$5M reduction in network costs",
-                    satisfaction: "12% increase in member satisfaction"
-                },
+                metrics: { "15%": "quality improvement", "$5M": "cost savings", "12%": "higher satisfaction" },
+                isNew: false,
                 image: "./images/slide_7.jpg"
             },
             {
                 id: 5,
                 title: "Automated Prior Authorization",
-                category: "Claims",
-                description: "Intelligent system that processes prior authorization requests using AI to review clinical guidelines and member coverage.",
-                businessContext: "Prior authorization was a major pain point, with 5-7 day turnaround times frustrating members and providers. Manual review was labor-intensive.",
-                technicalApproach: "Einstein AI reviewing medical necessity against clinical guidelines. Integration with electronic health records and pharmacy systems for real-time decision support.",
-                impact: "High Impact",
+                department: "Claims",
+                cloud: "Health Cloud",
+                description: "Intelligent system that processes prior authorization requests using AI to review clinical guidelines, member coverage, and medical necessity in real time.",
+                businessContext: "Prior authorization was a major pain point, with 5-7 day turnaround times frustrating members and providers. Manual review was labor-intensive and error-prone.",
+                technicalApproach: "Einstein AI reviewing medical necessity against clinical guidelines. Integration with EHR systems and pharmacy platforms for real-time decision support. Automated approvals for standard cases with human escalation for complex ones.",
+                impact: "High",
                 timeToValue: "3 months",
                 roi: "290%",
                 technologies: ["Einstein AI", "Health Cloud", "MuleSoft", "Decision Tables"],
-                metrics: {
-                    speed: "90% reduction in turnaround time",
-                    satisfaction: "4.7/5 provider satisfaction",
-                    volume: "10,000+ authorizations monthly"
-                },
+                metrics: { "90%": "faster turnaround", "4.7/5": "provider satisfaction", "10K+": "monthly authorizations" },
+                isNew: false,
                 image: "./images/slide_8.jpg"
             },
             {
                 id: 6,
                 title: "Personalized Wellness Programs",
-                category: "Member Services",
-                description: "AI-powered platform that creates customized wellness plans based on member health data, preferences, and engagement patterns.",
-                businessContext: "Generic wellness programs had low engagement rates. Members needed personalized recommendations that fit their lifestyle and health goals.",
-                technicalApproach: "Einstein Recommendation Engine analyzing member health profiles, activity data from wearables, and engagement history to create personalized plans delivered through Member Portal.",
-                impact: "Medium Impact",
+                department: "Member Services",
+                cloud: "Marketing Cloud",
+                description: "AI-powered platform that creates customized wellness plans based on member health data, preferences, wearable data, and engagement patterns.",
+                businessContext: "Generic wellness programs had low engagement rates. Members needed personalized recommendations that fit their lifestyle and health goals to drive meaningful behavior change.",
+                technicalApproach: "Einstein Recommendation Engine analyzing member health profiles, activity data from wearables, and engagement history to create personalized plans delivered through the Member Portal.",
+                impact: "Medium",
                 timeToValue: "3 months",
                 roi: "165%",
                 technologies: ["Einstein Next Best Action", "Experience Cloud", "Marketing Cloud", "IoT Integration"],
-                metrics: {
-                    engagement: "3x increase in program participation",
-                    health: "28% improvement in key health metrics",
-                    retention: "15% increase in member retention"
-                },
+                metrics: { "3x": "participation", "28%": "health improvement", "15%": "better retention" },
+                isNew: false,
                 image: "./images/slide_2.jpg"
             },
             {
                 id: 7,
-                title: "Data Cloud: Member Experience Extension",
-                category: "Data & Analytics",
-                description: "Unified data activation platform connecting Sales, Service, and Marketing to deliver personalized member experiences across all touchpoints.",
+                title: "Data Cloud: Member 360",
+                department: "Data & Analytics",
+                cloud: "Data Cloud",
+                description: "Unified data activation platform connecting Sales, Service, and Marketing to deliver personalized member experiences across all touchpoints in real time.",
                 businessContext: "Member data was siloed across multiple systems (Marketpoint 360, CRM Service, Marketing Cloud). This created fragmented experiences and missed opportunities for personalized engagement.",
                 technicalApproach: "Salesforce Data Cloud ingesting data from all sources, creating unified member profiles, and activating calculated insights (propensity to renew, attrition risk) across all CRM applications in real-time.",
-                impact: "Very High Impact",
+                impact: "Very High",
                 timeToValue: "6 months",
                 roi: "380%",
                 technologies: ["Data Cloud", "Einstein Analytics", "Marketing Cloud", "Health Cloud", "MuleSoft"],
-                metrics: {
-                    unification: "100% member profile unification",
-                    engagement: "45% increase in targeted outreach effectiveness",
-                    retention: "23% reduction in member attrition"
-                },
+                metrics: { "100%": "profile unification", "45%": "outreach effectiveness", "23%": "less attrition" },
                 hasVideo: true,
                 videoUrl: "https://play.goconsensus.com/bda8540e-a751-4c9f-b1b7-7a9412801c7e?preview=sales",
                 hasPDF: true,
                 pdfUrl: "./presentation.pdf",
+                isNew: true,
                 image: "./images/slide_10.jpg"
+            },
+            {
+                id: 8,
+                title: "Patient Scheduling Agent",
+                department: "Member Services",
+                cloud: "Health Cloud",
+                description: "Agentforce-powered scheduling agent that helps members find in-network providers, check availability, and book appointments through conversational AI.",
+                businessContext: "Members struggled to navigate provider directories and find available appointments. Phone-based scheduling was slow and created unnecessary administrative overhead for both members and staff.",
+                technicalApproach: "Agentforce agent with access to provider directory data, real-time availability APIs, and member coverage details. The agent can match members to appropriate specialists based on condition, location, and plan coverage.",
+                impact: "Very High",
+                timeToValue: "2 months",
+                roi: "340%",
+                technologies: ["Agentforce", "Health Cloud", "Flow", "MuleSoft", "Experience Cloud"],
+                metrics: { "65%": "self-scheduled", "3 min": "avg booking time", "92%": "accuracy rate" },
+                isNew: true
+            },
+            {
+                id: 9,
+                title: "Benefits Eligibility Checker",
+                department: "Member Services",
+                cloud: "Service Cloud",
+                description: "AI agent that instantly verifies member eligibility, explains coverage details, and resolves benefits questions without human intervention.",
+                businessContext: "Eligibility inquiries represented 35% of all call center volume. Members often waited 15+ minutes to speak with a representative for answers that could be automated.",
+                technicalApproach: "Agentforce service agent with deep integration to benefits administration systems. Uses natural language to explain complex coverage details and can process eligibility verification for providers in real time.",
+                impact: "High",
+                timeToValue: "2 months",
+                roi: "310%",
+                technologies: ["Agentforce", "Service Cloud", "MuleSoft", "Knowledge Base"],
+                metrics: { "85%": "auto-resolved", "24/7": "availability", "$1.8M": "annual savings" },
+                isNew: true
+            },
+            {
+                id: 10,
+                title: "Clinical Trial Matching",
+                department: "Care Coordination",
+                cloud: "Health Cloud",
+                description: "AI-powered matching engine that identifies eligible members for clinical trials based on their health profiles, conditions, and treatment history.",
+                businessContext: "Clinical trial enrollment was slow and manual. Eligible members were rarely identified and matched to appropriate trials, resulting in missed treatment opportunities and slow research progress.",
+                technicalApproach: "Einstein AI analyzing member health records against clinical trial eligibility criteria. Automated screening and outreach to eligible members through their preferred communication channel.",
+                impact: "High",
+                timeToValue: "5 months",
+                roi: "220%",
+                technologies: ["Einstein AI", "Health Cloud", "Data Cloud", "Marketing Cloud"],
+                metrics: { "4x": "match rate", "60%": "faster enrollment", "89%": "criteria accuracy" },
+                isNew: false
+            },
+            {
+                id: 11,
+                title: "Fraud Detection & Prevention",
+                department: "Compliance",
+                cloud: "Data Cloud",
+                description: "Real-time AI system that analyzes claims patterns to detect potential fraud, waste, and abuse before payments are processed.",
+                businessContext: "Healthcare fraud costs the industry billions annually. Existing rule-based systems caught only a fraction of fraudulent claims, and manual review was too slow to prevent payments.",
+                technicalApproach: "Einstein Discovery models trained on historical fraud patterns with real-time scoring of incoming claims. Integration with SIU workflows for automated case creation and investigation routing.",
+                impact: "Very High",
+                timeToValue: "4 months",
+                roi: "520%",
+                technologies: ["Einstein Discovery", "Data Cloud", "Flow Orchestration", "Tableau"],
+                metrics: { "340%": "more fraud detected", "$12M": "recovered annually", "92%": "precision rate" },
+                isNew: false
+            },
+            {
+                id: 12,
+                title: "HIPAA Compliance Monitor",
+                department: "Compliance",
+                cloud: "Data Cloud",
+                description: "Automated compliance monitoring agent that tracks data access patterns, identifies potential HIPAA violations, and generates audit reports.",
+                businessContext: "Manual compliance monitoring could not keep pace with the volume of data access events. Audit preparation was time-consuming and lacked real-time visibility into potential violations.",
+                technicalApproach: "Data Cloud event streaming with Einstein AI analyzing access patterns. Automated alerts for anomalous behavior and one-click audit report generation with full data lineage tracking.",
+                impact: "High",
+                timeToValue: "3 months",
+                roi: "195%",
+                technologies: ["Data Cloud", "Einstein AI", "Shield", "Flow", "Tableau"],
+                metrics: { "Real-time": "monitoring", "80%": "faster audits", "100%": "access tracking" },
+                isNew: true
+            },
+            {
+                id: 13,
+                title: "Medicare Plan Advisor",
+                department: "Sales",
+                cloud: "Experience Cloud",
+                description: "AI-powered conversational advisor that helps members compare Medicare Advantage plans, understand benefits, and select the best plan for their needs.",
+                businessContext: "Medicare plan selection is confusing for members, especially during Annual Enrollment Period. Agents were overwhelmed and members often chose suboptimal plans due to complexity.",
+                technicalApproach: "Agentforce agent trained on all plan details, formularies, and network information. Uses conversational AI to understand member needs and provide personalized plan recommendations with side-by-side comparisons.",
+                impact: "Very High",
+                timeToValue: "3 months",
+                roi: "385%",
+                technologies: ["Agentforce", "Experience Cloud", "Data Cloud", "Einstein AI"],
+                metrics: { "55%": "self-service enrollment", "4.8/5": "member satisfaction", "28%": "better plan fit" },
+                isNew: true
+            },
+            {
+                id: 14,
+                title: "Home Care Coordinator",
+                department: "Care Coordination",
+                cloud: "Health Cloud",
+                description: "Intelligent care coordination agent that suggests relevant home care services, builds quotes based on coverage details, and coordinates scheduling for home health visits.",
+                businessContext: "Home care coordination was highly manual, requiring multiple calls between care coordinators, providers, and members. Service recommendations were not personalized to member needs and coverage.",
+                technicalApproach: "Agentforce agent integrated with home care provider networks, member coverage data, and scheduling systems. Automates service matching, quote generation, and appointment coordination.",
+                impact: "High",
+                timeToValue: "4 months",
+                roi: "245%",
+                technologies: ["Agentforce", "Health Cloud", "Flow Orchestration", "MuleSoft"],
+                metrics: { "70%": "less coordination time", "3x": "faster scheduling", "91%": "member approval" },
+                isNew: true
+            },
+            {
+                id: 15,
+                title: "Population Health Dashboard",
+                department: "Data & Analytics",
+                cloud: "Tableau",
+                description: "AI-enhanced analytics platform providing real-time insights into population health trends, risk stratification, and care gap identification across member segments.",
+                businessContext: "Population health data was scattered across systems with no unified view. Care teams lacked the analytical tools to identify at-risk populations and measure intervention effectiveness.",
+                technicalApproach: "Tableau CRM powered by Data Cloud with Einstein AI for predictive risk scoring. Real-time dashboards with drill-down capabilities from population-level trends to individual member profiles.",
+                impact: "High",
+                timeToValue: "4 months",
+                roi: "310%",
+                technologies: ["Tableau", "Data Cloud", "Einstein Analytics", "Health Cloud"],
+                metrics: { "360\u00B0": "member view", "40%": "faster insights", "25%": "better risk ID" },
+                isNew: false
+            },
+            {
+                id: 16,
+                title: "Agent Performance Optimizer",
+                department: "Sales",
+                cloud: "Sales Cloud",
+                description: "AI-driven agent performance system that analyzes sales patterns, identifies coaching opportunities, and provides real-time next-best-action guidance during enrollment conversations.",
+                businessContext: "Sales agent performance varied widely across the organization. Managers lacked data-driven tools to identify what top performers did differently and replicate that across the team.",
+                technicalApproach: "Einstein AI analyzing call transcripts, enrollment patterns, and member interactions. Real-time coaching prompts during conversations and automated performance dashboards for managers.",
+                impact: "High",
+                timeToValue: "3 months",
+                roi: "230%",
+                technologies: ["Einstein AI", "Sales Cloud", "Tableau", "Flow"],
+                metrics: { "22%": "higher conversion", "35%": "faster onboarding", "18%": "more retention" },
+                isNew: false
             }
         ];
 
-        function App() {
-            const [selectedCategory, setSelectedCategory] = useState('All');
-            const [selectedUseCase, setSelectedUseCase] = useState(null);
-            const [activeTab, setActiveTab] = useState('overview');
+        const DEPARTMENTS = ['All', ...new Set(useCasesData.map(uc => uc.department))];
+        const CLOUDS = ['All', ...new Set(useCasesData.map(uc => uc.cloud))];
+        const IMPACTS = ['All', 'Very High', 'High', 'Medium'];
 
-            const categories = ['All', ...new Set(useCasesData.map(uc => uc.category))];
-            
-            const filteredUseCases = selectedCategory === 'All' 
-                ? useCasesData 
-                : useCasesData.filter(uc => uc.category === selectedCategory);
+        // ==========================================
+        // DROPDOWN COMPONENT
+        // ==========================================
+        function Dropdown({ label, options, value, onChange }) {
+            const [open, setOpen] = useState(false);
+            const ref = useRef(null);
 
-            const handleUseCaseClick = (useCase) => {
-                setSelectedUseCase(useCase);
-                setActiveTab('overview');
-            };
-
-            const closeModal = () => {
-                setSelectedUseCase(null);
-                setActiveTab('overview');
-            };
+            useEffect(() => {
+                function handleClick(e) {
+                    if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+                }
+                document.addEventListener('mousedown', handleClick);
+                return () => document.removeEventListener('mousedown', handleClick);
+            }, []);
 
             return (
-                <div className="app-container">
-                    <header className="header">
-                        <div className="header-content">
-                            <div className="brand-logos">
-                                <div className="logo-humana">HumanaForce</div>
-                                <div className="logo-divider"></div>
-                                <div className="logo-salesforce">
-                                    <div className="sf-cloud">☁</div>
-                                    <span>Powered by Salesforce</span>
+                <div className="filter-dropdown" ref={ref}>
+                    <button
+                        className={`filter-dropdown-btn ${value !== 'All' ? 'active' : ''}`}
+                        onClick={() => setOpen(!open)}
+                    >
+                        {value === 'All' ? label : value}
+                        <span className="filter-dropdown-arrow">{open ? '\u25B2' : '\u25BC'}</span>
+                    </button>
+                    {open && (
+                        <div className="filter-dropdown-menu">
+                            {options.map(opt => (
+                                <button
+                                    key={opt}
+                                    className={`filter-dropdown-item ${value === opt ? 'selected' : ''}`}
+                                    onClick={() => { onChange(opt); setOpen(false); }}
+                                >
+                                    {opt}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==========================================
+        // USE CASE CARD
+        // ==========================================
+        function UseCaseCard({ uc, index, onClick }) {
+            const impactClass = uc.impact === 'Very High' ? 'impact-very-high' : uc.impact === 'High' ? 'impact-high' : 'impact-medium';
+
+            return (
+                <div
+                    className="card animate-in"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => onClick(uc)}
+                >
+                    <div className="card-top">
+                        <div className="card-tags">
+                            <span className="card-tag tag-department">{uc.department}</span>
+                            <span className="card-tag tag-cloud">{uc.cloud}</span>
+                            {uc.isNew && <span className="card-tag tag-new">New</span>}
+                        </div>
+                        <h3 className="card-title">{uc.title}</h3>
+                        <p className="card-desc">{uc.description}</p>
+                    </div>
+                    <div className="card-bottom">
+                        <div className="card-metrics">
+                            <div className="card-metric">
+                                <span className="card-metric-value">{uc.roi}</span>
+                                <span className="card-metric-label">ROI</span>
+                            </div>
+                            <div className="card-metric">
+                                <span className="card-metric-value">{uc.timeToValue}</span>
+                                <span className="card-metric-label">Time to Value</span>
+                            </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span className={`card-impact ${impactClass}`}>{uc.impact}</span>
+                            <span className="card-arrow">\u2192</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // DETAIL MODAL
+        // ==========================================
+        function DetailModal({ uc, onClose }) {
+            const [tab, setTab] = useState('overview');
+
+            useEffect(() => {
+                document.body.style.overflow = 'hidden';
+                return () => { document.body.style.overflow = ''; };
+            }, []);
+
+            useEffect(() => { setTab('overview'); }, [uc]);
+
+            const impactClass = uc.impact === 'Very High' ? 'impact-very-high' : uc.impact === 'High' ? 'impact-high' : 'impact-medium';
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-head">
+                            <button className="modal-close-btn" onClick={onClose}>\u00D7</button>
+                            <div className="modal-head-tags">
+                                <span className="modal-head-tag">{uc.department}</span>
+                                <span className="modal-head-tag">{uc.cloud}</span>
+                                {uc.isNew && <span className="modal-head-tag" style={{ background: 'rgba(255,107,53,0.8)' }}>New</span>}
+                            </div>
+                            <h2>{uc.title}</h2>
+                            <p className="modal-head-sub">{uc.description}</p>
+                            <div className="modal-head-metrics">
+                                <div className="modal-head-metric">
+                                    <span className="modal-head-metric-value">{uc.roi}</span>
+                                    <span className="modal-head-metric-label">ROI</span>
+                                </div>
+                                <div className="modal-head-metric">
+                                    <span className="modal-head-metric-value">{uc.timeToValue}</span>
+                                    <span className="modal-head-metric-label">Time to Value</span>
+                                </div>
+                                <div className="modal-head-metric">
+                                    <span className={`card-impact ${impactClass}`} style={{ fontSize: '0.8125rem' }}>{uc.impact} Impact</span>
+                                    <span className="modal-head-metric-label">Impact Level</span>
                                 </div>
                             </div>
-                            <h1 className="hero-title">Transforming Health, with Agentforce</h1>
-                            <p className="hero-subtitle">
-                                Explore real-world AI use cases built specifically for Humana. 
-                                Each solution includes business context, technical guidance, and measurable impact.
-                            </p>
                         </div>
-                    </header>
 
-                    <nav className="nav">
-                        <div className="nav-content">
-                            <a href="#" className="nav-link active">Use Cases</a>
-                            <a href="#" className="nav-link">Submit Idea</a>
-                            <a href="#" className="nav-link">Resources</a>
-                            <a href="#" className="nav-link">About</a>
+                        <div className="modal-tabs">
+                            <button className={`modal-tab ${tab === 'overview' ? 'active' : ''}`} onClick={() => setTab('overview')}>Overview</button>
+                            <button className={`modal-tab ${tab === 'technical' ? 'active' : ''}`} onClick={() => setTab('technical')}>Technical Details</button>
+                            <button className={`modal-tab ${tab === 'metrics' ? 'active' : ''}`} onClick={() => setTab('metrics')}>Impact & Metrics</button>
+                            {uc.hasVideo && (
+                                <button className={`modal-tab ${tab === 'video' ? 'active' : ''}`} onClick={() => setTab('video')}>
+                                    Video Demo <span className="modal-tab-badge">New</span>
+                                </button>
+                            )}
+                            {uc.hasPDF && (
+                                <button className={`modal-tab ${tab === 'pdf' ? 'active' : ''}`} onClick={() => setTab('pdf')}>Presentation</button>
+                            )}
+                        </div>
+
+                        <div className="modal-body">
+                            {tab === 'overview' && (
+                                <>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Business Context</h4>
+                                        <p className="modal-section-content">{uc.businessContext}</p>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Solution Overview</h4>
+                                        <p className="modal-section-content">{uc.technicalApproach}</p>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Key Results</h4>
+                                        <div className="modal-stats-row">
+                                            {Object.entries(uc.metrics).map(([val, label]) => (
+                                                <div key={val} className="modal-stat-card">
+                                                    <div className="modal-stat-value">{val}</div>
+                                                    <div className="modal-stat-label">{label}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {tab === 'technical' && (
+                                <>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Technical Approach</h4>
+                                        <p className="modal-section-content">{uc.technicalApproach}</p>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Technologies & Products</h4>
+                                        <div className="modal-tech-list">
+                                            {uc.technologies.map((tech, i) => (
+                                                <span key={i} className="modal-tech-tag">{tech}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Salesforce Cloud</h4>
+                                        <div className="modal-tech-list">
+                                            <span className="modal-tech-tag" style={{ background: 'var(--salesforce-light-blue)', border: 'none', color: 'var(--salesforce-dark-blue)' }}>{uc.cloud}</span>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {tab === 'metrics' && (
+                                <>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Impact Level</h4>
+                                        <span className={`card-impact ${impactClass}`} style={{ fontSize: '0.875rem', padding: '0.375rem 0.875rem' }}>{uc.impact} Impact</span>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Key Performance Metrics</h4>
+                                        <div className="modal-stats-row">
+                                            {Object.entries(uc.metrics).map(([val, label]) => (
+                                                <div key={val} className="modal-stat-card">
+                                                    <div className="modal-stat-value">{val}</div>
+                                                    <div className="modal-stat-label">{label}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="modal-section">
+                                        <h4 className="modal-section-title">Return on Investment</h4>
+                                        <div className="modal-stats-row">
+                                            <div className="modal-stat-card">
+                                                <div className="modal-stat-value">{uc.roi}</div>
+                                                <div className="modal-stat-label">Projected ROI</div>
+                                            </div>
+                                            <div className="modal-stat-card">
+                                                <div className="modal-stat-value">{uc.timeToValue}</div>
+                                                <div className="modal-stat-label">Time to Value</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {tab === 'video' && uc.hasVideo && (
+                                <div className="embed-frame">
+                                    <iframe
+                                        src={uc.videoUrl}
+                                        allow="autoplay; fullscreen; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </div>
+                            )}
+
+                            {tab === 'pdf' && uc.hasPDF && (
+                                <div className="embed-frame">
+                                    <iframe src={uc.pdfUrl} />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // MAIN APP
+        // ==========================================
+        function App() {
+            const [search, setSearch] = useState('');
+            const [department, setDepartment] = useState('All');
+            const [cloud, setCloud] = useState('All');
+            const [impact, setImpact] = useState('All');
+            const [selectedUC, setSelectedUC] = useState(null);
+
+            const filtered = useMemo(() => {
+                return useCasesData.filter(uc => {
+                    if (department !== 'All' && uc.department !== department) return false;
+                    if (cloud !== 'All' && uc.cloud !== cloud) return false;
+                    if (impact !== 'All' && uc.impact !== impact) return false;
+                    if (search) {
+                        const q = search.toLowerCase();
+                        const haystack = (uc.title + ' ' + uc.description + ' ' + uc.department + ' ' + uc.cloud + ' ' + uc.technologies.join(' ')).toLowerCase();
+                        if (!haystack.includes(q)) return false;
+                    }
+                    return true;
+                });
+            }, [search, department, cloud, impact]);
+
+            const hasFilters = department !== 'All' || cloud !== 'All' || impact !== 'All' || search !== '';
+
+            const clearAll = () => {
+                setSearch('');
+                setDepartment('All');
+                setCloud('All');
+                setImpact('All');
+            };
+
+            const totalROI = useCasesData.reduce((sum, uc) => sum + parseInt(uc.roi), 0);
+            const avgROI = Math.round(totalROI / useCasesData.length);
+
+            return (
+                <div>
+                    {/* TOP NAVIGATION */}
+                    <nav className="topnav">
+                        <div className="topnav-inner">
+                            <div className="topnav-left">
+                                <a href="#" className="topnav-brand">
+                                    <div className="topnav-logo">H</div>
+                                    <span className="topnav-title"><span>Humana</span>Force</span>
+                                </a>
+                                <div className="topnav-links">
+                                    <a href="#" className="topnav-link active">Use Cases</a>
+                                    <a href="#" className="topnav-link">Resources</a>
+                                    <a href="#" className="topnav-link">Submit Idea</a>
+                                    <a href="#" className="topnav-link">About</a>
+                                </div>
+                            </div>
+                            <div className="topnav-right">
+                                <div className="sf-badge">
+                                    <span className="sf-badge-icon">{'\u2601'}</span>
+                                    Powered by Salesforce
+                                </div>
+                            </div>
                         </div>
                     </nav>
 
-                    <main className="main-content">
-                        <div className="filter-section">
-                            <h2 className="filter-header">Browse by Category</h2>
-                            <div className="filter-buttons">
-                                {categories.map(category => (
-                                    <button
-                                        key={category}
-                                        className={`filter-btn ${selectedCategory === category ? 'active' : ''}`}
-                                        onClick={() => setSelectedCategory(category)}
-                                    >
-                                        {category}
-                                    </button>
+                    {/* HERO */}
+                    <section className="hero">
+                        <div className="hero-inner">
+                            <div className="hero-badge">
+                                <span className="hero-badge-dot"></span>
+                                Built by Humana practitioners, for Humana
+                            </div>
+                            <h1>Your hub for Agentforce inspiration</h1>
+                            <p className="hero-subtitle">
+                                Discover real-world Salesforce AI use cases with video demos,
+                                business context, and technical guidance — tailored for healthcare.
+                            </p>
+                            <div className="hero-stats">
+                                <div className="hero-stat">
+                                    <div className="hero-stat-value">{useCasesData.length}</div>
+                                    <div className="hero-stat-label">Use Cases</div>
+                                </div>
+                                <div className="hero-stat">
+                                    <div className="hero-stat-value">{DEPARTMENTS.length - 1}</div>
+                                    <div className="hero-stat-label">Departments</div>
+                                </div>
+                                <div className="hero-stat">
+                                    <div className="hero-stat-value">{avgROI}%</div>
+                                    <div className="hero-stat-label">Avg. ROI</div>
+                                </div>
+                                <div className="hero-stat">
+                                    <div className="hero-stat-value">{CLOUDS.length - 1}</div>
+                                    <div className="hero-stat-label">Salesforce Clouds</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* FILTER BAR */}
+                    <div className="filter-bar">
+                        <div className="filter-bar-inner">
+                            <div className="filter-row">
+                                <div className="filter-search">
+                                    <span className="filter-search-icon">{'\uD83D\uDD0D'}</span>
+                                    <input
+                                        type="text"
+                                        placeholder="Search use cases..."
+                                        value={search}
+                                        onChange={e => setSearch(e.target.value)}
+                                    />
+                                </div>
+                                <div className="filter-divider"></div>
+                                <Dropdown label="Department" options={DEPARTMENTS} value={department} onChange={setDepartment} />
+                                <Dropdown label="Salesforce Cloud" options={CLOUDS} value={cloud} onChange={setCloud} />
+                                <Dropdown label="Impact" options={IMPACTS} value={impact} onChange={setImpact} />
+                                {hasFilters && <button className="filter-clear" onClick={clearAll}>Clear filters</button>}
+                                <span className="result-count">{filtered.length} use case{filtered.length !== 1 ? 's' : ''}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* MAIN GRID */}
+                    <main className="main">
+                        {filtered.length > 0 ? (
+                            <div className="grid">
+                                {filtered.map((uc, i) => (
+                                    <UseCaseCard key={uc.id} uc={uc} index={i} onClick={setSelectedUC} />
                                 ))}
                             </div>
-                        </div>
-
-                        <div className="use-cases-grid">
-                            {filteredUseCases.map(useCase => (
-                                <div 
-                                    key={useCase.id} 
-                                    className="use-case-card"
-                                    onClick={() => handleUseCaseClick(useCase)}
-                                >
-                                    <div className="card-image">
-                                        {useCase.image && <img src={useCase.image} alt={useCase.title} />}
-                                        <div className="card-image-overlay"></div>
-                                        <span className="category-badge">{useCase.category}</span>
-                                    </div>
-                                    <div className="card-body">
-                                        <h3 className="card-title">{useCase.title}</h3>
-                                        <p className="card-description">{useCase.description}</p>
-                                        <div className="card-meta">
-                                            <div className="meta-item">
-                                                <span className="meta-icon">⏱</span>
-                                                <span>{useCase.timeToValue}</span>
-                                            </div>
-                                            <div className="meta-item">
-                                                <span className="meta-icon">📈</span>
-                                                <span>{useCase.roi} ROI</span>
-                                            </div>
-                                        </div>
-                                        <div className="card-footer">
-                                            <span className="impact-tag">{useCase.impact}</span>
-                                            <button className="view-btn">View Details</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        ) : (
+                            <div className="empty-state">
+                                <div className="empty-state-icon">{'\uD83D\uDD0D'}</div>
+                                <h3>No use cases found</h3>
+                                <p>Try adjusting your filters or search query.</p>
+                            </div>
+                        )}
                     </main>
 
-                    {selectedUseCase && (
-                        <div className="modal-overlay" onClick={closeModal}>
-                            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                                <div className="modal-header">
-                                    <button className="modal-close" onClick={closeModal}>×</button>
-                                    <h2 className="modal-title">{selectedUseCase.title}</h2>
-                                    <p className="modal-category">{selectedUseCase.category}</p>
-                                </div>
-                                <div className="modal-body">
-                                    {/* Tabs for Video/PDF if available */}
-                                    {(selectedUseCase.hasVideo || selectedUseCase.hasPDF) && (
-                                        <div className="embed-tabs">
-                                            <button 
-                                                className={`embed-tab ${activeTab === 'overview' ? 'active' : ''}`}
-                                                onClick={() => setActiveTab('overview')}
-                                            >
-                                                Overview
-                                            </button>
-                                            {selectedUseCase.hasVideo && (
-                                                <button 
-                                                    className={`embed-tab ${activeTab === 'video' ? 'active' : ''}`}
-                                                    onClick={() => setActiveTab('video')}
-                                                >
-                                                    Video Demo <span className="embed-badge">NEW</span>
-                                                </button>
-                                            )}
-                                            {selectedUseCase.hasPDF && (
-                                                <button 
-                                                    className={`embed-tab ${activeTab === 'pdf' ? 'active' : ''}`}
-                                                    onClick={() => setActiveTab('pdf')}
-                                                >
-                                                    Presentation
-                                                </button>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {/* Video Embed */}
-                                    {activeTab === 'video' && selectedUseCase.hasVideo && (
-                                        <div className="embed-container">
-                                            <iframe 
-                                                src={selectedUseCase.videoUrl}
-                                                allow="autoplay; fullscreen; picture-in-picture"
-                                                allowFullScreen
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* PDF Embed */}
-                                    {activeTab === 'pdf' && selectedUseCase.hasPDF && (
-                                        <div className="embed-container">
-                                            <iframe 
-                                                src={selectedUseCase.pdfUrl}
-                                            />
-                                        </div>
-                                    )}
-
-                                    {/* Overview Content */}
-                                    {activeTab === 'overview' && (
-                                        <>
-                                            <div className="modal-section">
-                                                <h3 className="section-title">Overview</h3>
-                                                <p className="section-content">{selectedUseCase.description}</p>
-                                            </div>
-
-                                            <div className="modal-section">
-                                                <h3 className="section-title">Business Context</h3>
-                                                <p className="section-content">{selectedUseCase.businessContext}</p>
-                                            </div>
-
-                                            <div className="modal-section">
-                                                <h3 className="section-title">Technical Approach</h3>
-                                                <p className="section-content">{selectedUseCase.technicalApproach}</p>
-                                            </div>
-
-                                            <div className="modal-section">
-                                                <h3 className="section-title">Technologies Used</h3>
-                                                <div className="tech-stack">
-                                                    {selectedUseCase.technologies.map((tech, idx) => (
-                                                        <span key={idx} className="tech-tag">{tech}</span>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className="modal-section">
-                                                <h3 className="section-title">Impact & Results</h3>
-                                                <div className="stats-grid">
-                                                    {Object.entries(selectedUseCase.metrics).map(([key, value]) => (
-                                                        <div key={key} className="stat-card">
-                                                            <div className="stat-value">{value.split(' ')[0]}</div>
-                                                            <div className="stat-label">{value.split(' ').slice(1).join(' ')}</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
+                    {/* FOOTER */}
+                    <footer className="footer">
+                        <div className="footer-inner">
+                            <span className="footer-left">HumanaForce AI Use Case Library &mdash; Built for Humana by Salesforce practitioners</span>
+                            <span className="footer-right">
+                                <span className="sf-badge-icon" style={{ width: 16, height: 16, fontSize: '0.5rem' }}>{'\u2601'}</span>
+                                Powered by Salesforce Agentforce
+                            </span>
                         </div>
-                    )}
+                    </footer>
+
+                    {/* DETAIL MODAL */}
+                    {selectedUC && <DetailModal uc={selectedUC} onClose={() => setSelectedUC(null)} />}
                 </div>
             );
         }
